@@ -32,13 +32,18 @@ public class PlayerShooting : MonoBehaviour
 
     async void Shoot()
     {
+        // Calculate the initial direction once
+        Vector3 initialShootDirection = Camera.main.ScreenPointToRay(Input.mousePosition).direction;
+        Vector3 currentPos = ShootPoint.position;
+
         Ray ray;
         RaycastHit hit;
-        Vector3 currentPos = ShootPoint.position;
 
         for (int i = 0; i < 10; i++)
         {
-            ray = new Ray(currentPos, Camera.main.ScreenPointToRay(Input.mousePosition).direction);
+            // Use the initial direction for the ray
+            ray = new Ray(currentPos, initialShootDirection);
+
             if (Physics.Raycast(ray, out hit, 10, LayerMask.GetMask("Shootable")))
             {
                 EnemyHealth enemyHealth = hit.collider.GetComponent<EnemyHealth>();
@@ -46,19 +51,26 @@ public class PlayerShooting : MonoBehaviour
                 {
                     enemyHealth.Damage(20);
                     Debug.Log("Damaged 20!");
+                    
+                    // Show the line up to the hit point before returning
+                    line.enabled = true;
+                    line.SetPosition(0, ShootPoint.position); // Start from the actual shoot point
+                    line.SetPosition(1, hit.point);
                     return;
                 }
 
                 line.enabled = true;
                 line.SetPosition(0, currentPos);
                 line.SetPosition(1, hit.point);
+                currentPos = hit.point; // Update currentPos to the hit point for subsequent checks (if you want the ray to stop there)
+                                        // If the ray should continue past a non-enemy "shootable" object, remove this line.
             }
             else
             {
                 line.enabled = true;
                 line.SetPosition(0, currentPos);
-                line.SetPosition(1, currentPos + ray.direction * 10);
-                currentPos = currentPos + ray.direction * 10;
+                line.SetPosition(1, currentPos + initialShootDirection * 10); // Use initial direction
+                currentPos = currentPos + initialShootDirection * 10; // Update currentPos for the next step
             }
             await Task.Delay(100);
         }

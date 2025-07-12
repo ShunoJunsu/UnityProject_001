@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class PlayerHealth : MonoBehaviour
 {
     public int hp = 100;
+    public bool isInvulnerable = false;
     Vector3 posRespawn;
 
     bool bDamage;
@@ -39,11 +40,15 @@ public class PlayerHealth : MonoBehaviour
 
         GetComponent<PlayerController>().enabled = true;
         GetComponent<PlayerShooting>().enabled = true;
+        Invoke(() =>
+        {
+            isInvulnerable = false;
+        }, 5);
     }
 
     public void Damage(int amount)
     {
-        if (hp <= 0) return;
+        if (hp <= 0 || isInvulnerable) return;
 
         hp -= amount;
         bDamage = true;
@@ -53,6 +58,7 @@ public class PlayerHealth : MonoBehaviour
 
             GetComponent<PlayerController>().enabled = false;
             GetComponent<PlayerShooting>().enabled = false;
+            isInvulnerable = true;
             Invoke("Respawn", 3);
         }
     }

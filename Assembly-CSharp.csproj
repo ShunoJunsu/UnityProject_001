@@ -46,6 +46,7 @@
      <Compile Include="Assets\Environment\Scripts\RandomFloorBotMovement.cs" />
      <Compile Include="Assets\EnemySpawn.cs" />
      <Compile Include="Assets\PlayerController.cs" />
+     <Compile Include="Assets\SceneMove.cs" />
      <None Include="Assets\Environment\Image Effects\_Sources\Shaders\VignettingShader.shader" />
      <None Include="Assets\Environment\Image Effects\_Sources\Shaders\ColorCorrectionCurves.shader" />
      <None Include="Assets\Environment\Image Effects\_Sources\Shaders\ColorCorrectionCurvesSimple.shader" />

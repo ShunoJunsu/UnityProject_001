@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     public bool bIsJumping = true;
 
-    public float original_walkSpeed = 1;
+    public float original_walkSpeed = 10;
 
     public float original_lookSensitivity = 2;
 
@@ -43,16 +43,28 @@ public class PlayerController : MonoBehaviour
         Move();
         CameraRotation();
         CharacterRotation();
+        Jump();
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space) && Physics.Raycast(gameObject.transform.position, Vector3.down, 0.3f, LayerMask.GetMask("Shootable")))
+    private bool isGrounded()
+    {
+        RaycastHit hit; 
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.Space)) && Physics.Raycast(gameObject.transform.position, Vector3.down, out hit, 0.5f))
         {
-            Jump();
+            if (hit.collider.CompareTag("Ground"))
+            {
+                return true;
+            }
         }
+        return false;
     }
 
     private void Jump()
     {
-        myRigid.AddForce(Vector3.up * JmpForce);
+        if (isGrounded())
+        {
+            myRigid.AddForce(Vector3.up * JmpForce);
+        }
     }
 
     private void Move()

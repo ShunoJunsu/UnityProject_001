@@ -355,6 +355,7 @@
 "Assets/PlayerController.cs"
 "Assets/PlayerHealth.cs"
 "Assets/PlayerShooting.cs"
+"Assets/SceneMove.cs"
 -langversion:9.0
 
 /deterministic
